@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Zubi-RF COMM Signal Receiver</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -22,29 +21,23 @@
             padding: 15px;
         }
 
-        /* Zubi-RF Radio Body */
         .zubi-rf {
             max-width: 450px;
             width: 100%;
             background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
             border-radius: 35px;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.1),
-                0 0 0 3px #3a3a3a,
-                0 0 0 5px #1a1a1a;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 3px #3a3a3a;
             overflow: hidden;
-            position: relative;
         }
 
-        /* Antenna */
         .antenna {
             width: 8px;
             height: 45px;
             background: linear-gradient(90deg, #8a8a8a, #c0c0c0, #8a8a8a);
-            position: absolute;
-            top: -40px;
-            right: 25px;
+            position: relative;
+            margin-left: auto;
+            margin-right: 25px;
+            top: 10px;
             border-radius: 4px 4px 0 0;
         }
 
@@ -59,20 +52,11 @@
             border-radius: 50%;
         }
 
-        /* Speaker Grill */
         .speaker {
             background: #111;
             margin: 20px 20px 10px 20px;
             padding: 12px;
             border-radius: 20px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        .speaker-grill {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 4px;
         }
 
         .grill-line {
@@ -83,37 +67,14 @@
             border-radius: 2px;
         }
 
-        /* LCD Display */
         .lcd-display {
             background: #0a2a0a;
             margin: 10px 20px;
             padding: 15px 12px;
             border-radius: 12px;
-            box-shadow: 
-                inset 0 0 10px rgba(0,0,0,0.5),
-                0 2px 5px rgba(0,0,0,0.3);
             border: 2px solid #2ecc2e;
-            position: relative;
-            z-index: 2;
         }
 
-        /* Hidden iframe (almost zero height) */
-        .hidden-sdr {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-            top: -9999px;
-            left: -9999px;
-        }
-
-        .hidden-sdr iframe {
-            width: 1px;
-            height: 1px;
-        }
-
-        /* LCD Content */
         .frequency {
             text-align: center;
             margin-bottom: 10px;
@@ -123,20 +84,17 @@
             color: #2ecc2e;
             font-size: 0.65rem;
             letter-spacing: 2px;
-            text-shadow: 0 0 3px #2ecc2e;
         }
 
         .freq-value {
             background: #000;
             color: #2ecc2e;
             font-size: 1.6rem;
-            font-family: 'Digital', 'Courier New', monospace;
+            font-family: monospace;
             font-weight: bold;
             padding: 8px;
             border-radius: 8px;
-            letter-spacing: 3px;
             text-shadow: 0 0 5px #2ecc2e;
-            border: 1px solid #2e4a2e;
         }
 
         .channel-info {
@@ -147,7 +105,6 @@
         .channel-name {
             color: #2ecc2e;
             font-size: 0.7rem;
-            font-weight: bold;
             background: #000;
             display: inline-block;
             padding: 3px 12px;
@@ -163,23 +120,21 @@
 
         .signal-bar {
             width: 4px;
-            height: 8px;
             background: #2ecc2e;
             border-radius: 1px;
         }
 
+        .signal-bar:nth-child(1) { height: 8px; }
         .signal-bar:nth-child(2) { height: 12px; }
         .signal-bar:nth-child(3) { height: 16px; }
         .signal-bar:nth-child(4) { height: 20px; }
         .signal-bar:nth-child(5) { height: 12px; }
 
-        /* Zubi-RF Branding */
         .branding {
             text-align: center;
             padding: 5px;
             font-size: 0.55rem;
             color: #5a7a5a;
-            letter-spacing: 1px;
         }
 
         .branding .model {
@@ -187,14 +142,12 @@
             font-weight: bold;
         }
 
-        /* Channel strip */
         .channel-strip {
             display: flex;
             gap: 8px;
             padding: 10px 15px;
             background: #111;
             overflow-x: auto;
-            white-space: nowrap;
         }
 
         .channel-badge {
@@ -213,7 +166,6 @@
             border: 1px solid #2ecc2e;
         }
 
-        /* Keypad */
         .keypad {
             padding: 10px 20px 20px 20px;
         }
@@ -229,68 +181,29 @@
             background: linear-gradient(145deg, #333, #222);
             border: none;
             color: #2ecc2e;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             font-weight: bold;
             font-size: 1.2rem;
             padding: 12px;
             border-radius: 12px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.3);
             cursor: pointer;
             text-align: center;
-            transition: all 0.05s linear;
         }
 
         .key:active {
             transform: translateY(2px);
             background: #2e4a2e;
-            color: #0a0f0a;
         }
 
         .key.special {
             background: linear-gradient(145deg, #2a3a2a, #1a2a1a);
-            color: #2ecc2e;
             font-size: 0.8rem;
         }
 
         .key.enter {
             background: linear-gradient(145deg, #2e4a2e, #1a3a1a);
-            color: #0a0f0a;
-            font-size: 0.8rem;
         }
 
-        /* Side buttons */
-        .side-buttons {
-            position: absolute;
-            right: -8px;
-            top: 40%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .side-btn {
-            width: 25px;
-            height: 35px;
-            background: linear-gradient(90deg, #444, #333);
-            border-radius: 0 8px 8px 0;
-            cursor: pointer;
-            border-left: 2px solid #2ecc2e;
-        }
-
-        .side-btn:active {
-            background: #2ecc2e;
-        }
-
-        /* Battery indicator */
-        .battery {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 0.65rem;
-            color: #2ecc2e;
-        }
-
-        /* Status LEDs */
         .status-leds {
             display: flex;
             gap: 15px;
@@ -318,7 +231,6 @@
 
         .led.active .light {
             background: #2ecc2e;
-            box-shadow: 0 0 5px #2ecc2e;
             animation: blink 1s infinite;
         }
 
@@ -327,19 +239,25 @@
             50% { opacity: 0.4; }
         }
 
-        /* Developer credit */
         .dev-credit {
             text-align: center;
             padding: 10px;
             background: #050805;
-            border-top: 1px solid #1e2e1e;
             font-size: 0.55rem;
             color: #4a6a4a;
         }
 
-        .dev-credit a {
-            color: #2ecc2e;
-            text-decoration: none;
+        .iframe-container {
+            margin: 10px 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
         }
 
         .toast {
@@ -352,7 +270,6 @@
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.65rem;
-            border-left: 3px solid #2ecc2e;
             z-index: 10000;
             animation: fadeOut 2s forwards;
         }
@@ -363,54 +280,27 @@
             100% { opacity: 0; visibility: hidden; }
         }
 
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: #2ecc2e;
-        }
-
-        .loading.hidden {
-            display: none;
-        }
-
-        .spinner {
-            width: 30px;
-            height: 30px;
-            border: 2px solid #2e4a2e;
-            border-top-color: #2ecc2e;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .error-message {
+            background: #2a1a1a;
+            color: #ff6b6b;
+            padding: 15px;
+            margin: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.7rem;
         }
     </style>
 </head>
 <body>
     <div class="zubi-rf">
         <div class="antenna"></div>
-        <div class="battery">🔋 100%</div>
-
-        <!-- Speaker Grill -->
+        
         <div class="speaker">
-            <div class="speaker-grill">
-                <div class="grill-line"></div>
-                <div class="grill-line"></div>
-                <div class="grill-line"></div>
-            </div>
+            <div class="grill-line"></div>
+            <div class="grill-line"></div>
+            <div class="grill-line"></div>
         </div>
 
-        <!-- LCD Display -->
         <div class="lcd-display">
             <div class="frequency">
                 <div class="freq-label">ZUBI-RF COMM</div>
@@ -428,44 +318,43 @@
             </div>
         </div>
 
-        <!-- Branding -->
         <div class="branding">
             <span class="model">🔐 ZUBI-RF COMM SIGNAL RECEIVER</span>
         </div>
 
-        <!-- Channel Strip -->
         <div class="channel-strip" id="channelStrip"></div>
 
-        <!-- Keypad -->
+        <div class="iframe-container">
+            <iframe id="sdrIframe" src="about:blank" title="SDR Receiver"></iframe>
+        </div>
+
         <div class="keypad">
             <div class="key-row">
-                <button class="key" data-freq="3500000">1</button>
-                <button class="key" data-freq="7000000">2</button>
-                <button class="key" data-freq="14100000">3</button>
+                <button class="key" data-url="https://websdr.srr-76.ru/">1</button>
+                <button class="key" data-url="https://websdr.ewi.utwente.nl:8901/">2</button>
+                <button class="key" data-url="https://sdr.homeip.net:8901/">3</button>
             </div>
             <div class="key-row">
-                <button class="key" data-freq="145350000">4</button>
-                <button class="key" data-freq="430000000">5</button>
-                <button class="key" data-freq="7175000">6</button>
+                <button class="key" data-url="https://appr.org.br:8901/">4</button>
+                <button class="key" data-url="https://sdr.r9a.ru/">5</button>
+                <button class="key" data-url="https://na5b.com:8901/">6</button>
             </div>
             <div class="key-row">
-                <button class="key" data-cmd="LSB">LSB</button>
-                <button class="key" data-cmd="USB">USB</button>
-                <button class="key" data-cmd="FM">FM</button>
+                <button class="key" data-url="https://radio-sdr.dyndns.org:8901/">7</button>
+                <button class="key" data-url="https://80m.radiorubka.org/">8</button>
+                <button class="key" data-url="https://sv3gcb.ddns.net:8905/">9</button>
             </div>
             <div class="key-row">
-                <button class="key special" data-cmd="m">MUTE</button>
-                <button class="key special" data-cmd="V">VOL+</button>
-                <button class="key special" data-cmd="v">VOL-</button>
+                <button class="key" data-url="https://remoteradio.changeip.org:8073/">10</button>
+                <button class="key" data-url="https://85.173.189.23:8901/">11</button>
+                <button class="key" data-url="https://lu3dj.ddns.net:8080/">12</button>
             </div>
             <div class="key-row">
-                <button class="key enter" id="enableAudioBtn">🔊 AUDIO</button>
                 <button class="key enter" id="reloadBtn">⟳ RELOAD</button>
-                <button class="key special" id="directFreqBtn">DIRECT</button>
+                <button class="key special" id="infoBtn">ℹ️ INFO</button>
             </div>
         </div>
 
-        <!-- Status LEDs -->
         <div class="status-leds">
             <div class="led active"><span class="light"></span><span>PWR</span></div>
             <div class="led active"><span class="light"></span><span>RX</span></div>
@@ -473,64 +362,31 @@
             <div class="led active"><span class="light"></span><span>SDR</span></div>
         </div>
 
-        <!-- Developer Credit -->
         <div class="dev-credit">
             ⚡ DEVELOPED BY <strong style="color:#2ecc2e;">@zabi</strong> ⚡
         </div>
-
-        <!-- Hidden iframe -->
-        <div class="hidden-sdr">
-            <iframe id="sdrIframe" src="about:blank" title="SDR" allow="autoplay; microphone"></iframe>
-        </div>
-    </div>
-
-    <!-- Frequency Modal -->
-    <div id="freqModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; justify-content:center; align-items:center;">
-        <div style="background:#1a2a1a; border:2px solid #2ecc2e; border-radius:15px; padding:20px; width:90%; max-width:300px; text-align:center;">
-            <h3 style="color:#2ecc2e;">ZUBI-RF DIRECT TUNE</h3>
-            <input type="text" id="freqInput" placeholder="e.g., 7175000 or 7.175" style="background:#000; border:1px solid #2e4a2e; color:#2ecc2e; padding:10px; width:100%; margin:15px 0; border-radius:8px; font-family:monospace;">
-            <div>
-                <button onclick="setDirectFrequency()" style="background:#2e4a2e; color:#2ecc2e; border:none; padding:8px 20px; margin:5px; border-radius:6px; cursor:pointer;">TUNE</button>
-                <button onclick="closeModal()" style="background:#333; color:#2ecc2e; border:none; padding:8px 20px; margin:5px; border-radius:6px; cursor:pointer;">CANCEL</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="loadingOverlay" class="loading hidden">
-        <div class="spinner"></div>
-        <div>ZUBI-RF CONNECTING...</div>
     </div>
 
     <script>
-        // ============ 12 CHANNELS ============
         const channels = {
-            1: { name: "YAROSLAVL", url: "http://websdr.srr-76.ru/", location: "Russia", freq: "7.175" },
-            2: { name: "NETHERLANDS", url: "http://websdr.ewi.utwente.nl:8901/", location: "Twente", freq: "7.175" },
-            3: { name: "USA HOMEIP", url: "http://sdr.homeip.net:8901/", location: "USA", freq: "7.175" },
-            4: { name: "BRAZIL", url: "http://appr.org.br:8901/", location: "Brazil", freq: "7.175" },
-            5: { name: "RUSSIA R9A", url: "http://sdr.r9a.ru/", location: "Russia", freq: "7.175" },
-            6: { name: "USA NA5B", url: "http://na5b.com:8901/", location: "USA", freq: "7.175" },
-            7: { name: "USA RADIO", url: "http://radio-sdr.dyndns.org:8901/", location: "USA", freq: "7.175" },
-            8: { name: "RUSSIA 80m", url: "https://80m.radiorubka.org/", location: "Tambov", freq: "3.650" },
-            9: { name: "GREECE", url: "http://sv3gcb.ddns.net:8905/", location: "Greece", freq: "7.175" },
-            10: { name: "REMOTE", url: "http://remoteradio.changeip.org:8073/", location: "Global", freq: "7.175" },
-            11: { name: "RUSSIA IP", url: "http://85.173.189.23:8901/", location: "Russia", freq: "7.175" },
-            12: { name: "ARGENTINA", url: "http://lu3dj.ddns.net:8080/", location: "Argentina", freq: "7.175" }
+            1: { name: "YAROSLAVL", url: "https://websdr.srr-76.ru/", location: "Russia" },
+            2: { name: "NETHERLANDS", url: "https://websdr.ewi.utwente.nl:8901/", location: "Twente" },
+            3: { name: "USA HOMEIP", url: "https://sdr.homeip.net:8901/", location: "USA" },
+            4: { name: "BRAZIL", url: "https://appr.org.br:8901/", location: "Brazil" },
+            5: { name: "RUSSIA R9A", url: "https://sdr.r9a.ru/", location: "Russia" },
+            6: { name: "USA NA5B", url: "https://na5b.com:8901/", location: "USA" },
+            7: { name: "USA RADIO", url: "https://radio-sdr.dyndns.org:8901/", location: "USA" },
+            8: { name: "RUSSIA 80m", url: "https://80m.radiorubka.org/", location: "Tambov" },
+            9: { name: "GREECE", url: "https://sv3gcb.ddns.net:8905/", location: "Greece" },
+            10: { name: "REMOTE", url: "https://remoteradio.changeip.org:8073/", location: "Global" },
+            11: { name: "RUSSIA IP", url: "https://85.173.189.23:8901/", location: "Russia" },
+            12: { name: "ARGENTINA", url: "https://lu3dj.ddns.net:8080/", location: "Argentina" }
         };
 
         let currentChannel = 1;
-        let currentFreq = 7175000;
-        let activeUrl = channels[1].url;
-
         const iframe = document.getElementById('sdrIframe');
         const channelNameSpan = document.getElementById('channelName');
-        const freqDisplay = document.getElementById('freqDisplay');
-        const loadingOverlay = document.getElementById('loadingOverlay');
         const channelStrip = document.getElementById('channelStrip');
-        const freqModal = document.getElementById('freqModal');
-
-        function formatFreq(freq) { return (freq / 1000000).toFixed(3).replace('.', '.') + ' MHz'; }
-        function updateFreqDisplay() { freqDisplay.textContent = formatFreq(currentFreq); }
 
         function showToast(msg, isError = false) {
             const toast = document.createElement('div');
@@ -541,27 +397,26 @@
             setTimeout(() => toast.remove(), 2000);
         }
 
-        function showLoading() { loadingOverlay.classList.remove('hidden'); }
-        function hideLoading() { loadingOverlay.classList.add('hidden'); }
-
-        function sendFrequencyToSDR(freqHz) {
-            const mhz = (freqHz / 1000000).toFixed(3);
-            sendCommand('g');
-            setTimeout(() => {
-                for (let char of mhz.toString()) { sendCommand(char); }
-                sendCommand('Enter');
-                showToast(`📡 Tuned to ${mhz} MHz`);
-            }, 100);
-        }
-
-        function sendCommand(key) {
-            try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-                if (iframeDoc) {
-                    const event = new KeyboardEvent('keydown', { key: key, code: key.length === 1 ? 'Key' + key.toUpperCase() : key, bubbles: true });
-                    iframeDoc.dispatchEvent(event);
-                }
-            } catch(e) { /* CORS - silent */ }
+        function loadChannel(channelNum) {
+            const channel = channels[channelNum];
+            if (!channel) return;
+            
+            currentChannel = channelNum;
+            channelNameSpan.innerHTML = `CH${channelNum}: ${channel.name} (${channel.location})`;
+            
+            document.querySelectorAll('.channel-badge').forEach((badge, idx) => {
+                badge.classList.toggle('active', idx + 1 === channelNum);
+            });
+            
+            // Load the SDR in iframe
+            iframe.src = channel.url;
+            
+            showToast(`🔗 Connecting to ${channel.name}...`);
+            
+            // Handle iframe load error
+            iframe.onerror = () => {
+                showToast(`⚠️ Cannot load ${channel.name}. The SDR may not support HTTPS.`, true);
+            };
         }
 
         function buildChannelStrip() {
@@ -570,66 +425,31 @@
                 const badge = document.createElement('div');
                 badge.className = 'channel-badge';
                 badge.textContent = `${i}. ${channels[i].name.substring(0, 8)}`;
-                badge.onclick = () => changeChannel(i);
+                badge.onclick = () => loadChannel(i);
                 channelStrip.appendChild(badge);
             }
         }
 
-        function changeChannel(channelNum) {
-            const channel = channels[channelNum];
-            if (!channel) return;
-            currentChannel = channelNum;
-            activeUrl = channel.url;
-            channelNameSpan.innerHTML = `CH${channelNum}: ${channel.name}`;
-            
-            document.querySelectorAll('.channel-badge').forEach((badge, idx) => {
-                badge.classList.toggle('active', idx + 1 === channelNum);
-            });
-            
-            showLoading();
-            iframe.src = channel.url;
-            iframe.onload = () => { hideLoading(); showToast(`🔗 ${channel.name} ONLINE`); };
-            setTimeout(() => hideLoading(), 4000);
+        function reloadIframe() {
+            iframe.src = channels[currentChannel].url;
+            showToast("⟳ Reloading SDR...");
         }
 
-        function reloadIframe() { showLoading(); iframe.src = activeUrl; setTimeout(() => hideLoading(), 3000); }
-        function enableAudio() { reloadIframe(); showToast("🎧 AUDIO READY - Click PLAY in SDR"); }
-
-        function setDirectFrequency() {
-            let input = document.getElementById('freqInput').value.trim();
-            let freq = input.includes('.') ? parseFloat(input) * 1000000 : parseInt(input);
-            if (!isNaN(freq) && freq > 0) {
-                currentFreq = freq;
-                updateFreqDisplay();
-                sendFrequencyToSDR(currentFreq);
-                closeModal();
-            } else { showToast('⚠️ Invalid frequency!', true); }
+        function showInfo() {
+            showToast("📡 Select a channel to connect to SDR receivers worldwide", false);
         }
 
-        function openModal() { freqModal.style.display = 'flex'; }
-        function closeModal() { freqModal.style.display = 'none'; }
-
-        // Keypad events
-        document.querySelectorAll('.key[data-freq]').forEach(btn => {
-            btn.onclick = () => {
-                currentFreq = parseInt(btn.dataset.freq);
-                updateFreqDisplay();
-                sendFrequencyToSDR(currentFreq);
-            };
+        // Initialize keypad buttons
+        document.querySelectorAll('.key[data-url]').forEach((btn, index) => {
+            btn.onclick = () => loadChannel(index + 1);
         });
 
-        document.querySelectorAll('.key[data-cmd]').forEach(btn => {
-            btn.onclick = () => sendCommand(btn.dataset.cmd);
-        });
-
-        document.getElementById('enableAudioBtn').onclick = enableAudio;
         document.getElementById('reloadBtn').onclick = reloadIframe;
-        document.getElementById('directFreqBtn').onclick = openModal;
+        document.getElementById('infoBtn').onclick = showInfo;
 
         // Initialize
         buildChannelStrip();
-        changeChannel(1);
-        updateFreqDisplay();
+        loadChannel(1);
     </script>
 </body>
 </html>
